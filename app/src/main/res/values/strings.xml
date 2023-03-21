@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">Circuit Companion</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tank_cct_button">TANK CIRCUITS</string>
+    <string name="rlc_cct_button">RLC circuit Button</string>
+    <string name="ohms_law_btn">Ohms\'s Law</string>
+    <string name="color_code_btn">Resistor Color Code</string>
+    <string name="tank_circuit">RLC Circuit</string>
+    <string name="transformer_param">Transformer</string>
+    <string name="ohms_law">OHM\'S LAW</string>
+    <string name="resistor_color_codes">RESISTOR COLOUR CODES</string>
+    <string name="resistor_arrangement">Equivalent Resistors</string>
+    <string name="network_theorems">Network Theorems</string>
+    <string name="select_colours">Select the colours on the resistor</string>
+    <string name="first_color">First Colour</string>
+    <string name="second_color">Second Colour</string>
+    <string name="third_colour">Third Colour</string>
+    <string name="fourth_colour">Fourth Colour</string>
+    <string name="resistor_value">The value of your resistor is as follows:</string>
+    <string name="calculate">CALCULATE</string>
+    <string name="color_code_frag_title">Resistor Colour Coding</string>
+    <string name="tank_description">Select a parameter to calculate its value</string>
+    <string name="frequency">Resonance Frequency (in Hertz)</string>
+    <string name="capacitance">Capacitance (in micro Farad)</string>
+    <string name="inductance">Inductance (in Henry)</string>
+    <string name="delta_to_star">Delta to Star</string>
+    <string name="star_to_delta">Star to Delta</string>
+    <string name="transformer_description">Star/Delta Transformation</string>
+    <string name="box1">0.0</string>
+    <string name="to_be_designed">BACK GROUND TO BE DESIGNED</string>
+    <string name="voltage">Potential Difference (V)</string>
+    <string name="current">Current (A)</string>
+    <string name="resistance">Resistance (R)</string>
+    <string name="power">Power (W)</string>
+    <string name="to_do">Blank space yet to be implemented</string>
+    <string name="menu_item1">Feedback</string>
+    <string name="charlyco_tech">Charlyco Technologies</string>
+    <string name="star_delta_transform">Start/Delta Circuit</string>
+    <string name="star">Image of star circuit</string>
+    <string name="test_add_unit">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="main_frag_ad_unit">ca-app-pub-1760033402580112/9115104664</string>
+    <string name="ohms_law_frag_ad_unit">ca-app-pub-1760033402580112/8691049946</string>
+    <string name="rlc_frag_ad_unit">ca-app-pub-1760033402580112/2601118467</string>
+    <string name="color_code_frag_ad_unit">ca-app-pub-1760033402580112/2426654801</string>
+    <string name="star_delta_frag_ad_unit">ca-app-pub-1760033402580112/7487409796</string>
+
+</resources>
