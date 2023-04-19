@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import com.example.circuitcompanion.R
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -11,9 +12,28 @@ import kotlin.math.sqrt
 class OhmsLawViewModel(application: Application) : ViewModel() {
     var resultSate: MutableLiveData<String> = MutableLiveData("")
     var labels: MutableLiveData<MutableList<String>> = MutableLiveData(mutableListOf("", ""))
+    var formulaId: MutableLiveData<Int> = MutableLiveData()
 
-    fun setLabels(s: String, s1: String){
+    fun setLabelsAndFormulaId(s: String, s1: String, id: Int){
         labels.value = mutableListOf(s, s1)
+        formulaId.value = id
+    }
+
+    fun selectFormularAndcalculate(id: Int, param1: String, param2: String) {
+        when(id) {
+            R.drawable.icon_1 -> calcVoltageWithPandR(param1.toDouble(), param2.toDouble())
+            R.drawable.icon_2 -> calcVoltageWithPandI(param1.toDouble(), param2.toDouble())
+            R.drawable.icon_3 -> calcVoltageWithIandR(param1.toDouble(), param2.toDouble())
+            R.drawable.icon_4 -> calcResistanceWithVandI(param1.toDouble(), param2.toDouble())
+            R.drawable.icon_5 -> calcResistanceWithVandP(param1.toDouble(), param2.toDouble())
+            R.drawable.icon_6 -> calcResistanceWithIandP(param1.toDouble(), param2.toDouble())
+            R.drawable.icon_7 -> calcPowerWithVandR(param1.toDouble(), param2.toDouble())
+            R.drawable.icon_8 -> calcPowerWithRandI(param1.toDouble(), param2.toDouble())
+            R.drawable.icon_9 -> calcPowerWithIandV(param1.toDouble(), param2.toDouble())
+            R.drawable.icon_10 -> calcCurrentWithRandV(param1.toDouble(), param2.toDouble())
+            R.drawable.icon_11 -> calcCurrentWithPandV(param1.toDouble(), param2.toDouble())
+            R.drawable.icon_12 -> calcCurrentWithRandP(param1.toDouble(), param2.toDouble())
+        }
     }
 
     fun calcVoltageWithPandR(p: Double, r: Double) {

@@ -2,10 +2,8 @@ package com.charlyco.circuitcompanion.ohms_law
 
 import android.app.Application
 import android.content.Context
-import android.util.DisplayMetrics
-import android.util.Log
-import android.view.WindowManager
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,11 +18,9 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,6 +31,7 @@ import androidx.navigation.NavController
 import com.charlyco.circuitcompanion.viewModels.OhmsLawViewModel
 import com.charlyco.circuitcompanion.viewModels.OhmsLawViewModelFactory
 import com.example.circuitcompanion.R
+import kotlin.properties.Delegates
 
 @Composable
 fun OhmsLaw(navController: NavController) {
@@ -64,38 +61,75 @@ fun OhmsLawScreen(modifier: Modifier) {
         }
     val result: String by ohmViewModel!!.resultSate.observeAsState("")
     val labels: MutableList<String> by ohmViewModel!!.labels.observeAsState(mutableListOf("", ""))
+    val formulaId: Int by ohmViewModel!!.formulaId.observeAsState(0)
 
     ConstraintLayout(modifier = modifier.fillMaxSize()) {
-            val (text_boxes, formula_card, resut_text_view) = createRefs()
+            val (text_boxes, formula_card, result_text_view, calc_button) = createRefs()
 
             TextBoxes(labels, modifier = modifier
                 .constrainAs(text_boxes) {
                     centerHorizontallyTo(parent)
-                    bottom.linkTo(formula_card.top, margin = 8.dp)
+                    bottom.linkTo(calc_button.top, margin = 8.dp)
                 }
             )
                 FormulaCard(
                     modifier = modifier.constrainAs(formula_card) {
                         centerHorizontallyTo(parent)
-                        bottom.linkTo(parent.bottom, margin = 16.dp)
+                        bottom.linkTo(parent.bottom, margin = 8.dp)
                     },
                     ohmViewModel
                 )
 
             ResultTextView(
                 result,
-                modifier = modifier.constrainAs(resut_text_view) {
+                modifier = modifier.constrainAs(result_text_view) {
                     centerHorizontallyTo(parent)
-                    top.linkTo(parent.top, margin = 16.dp)
+                    top.linkTo(parent.top, margin = 8.dp)
                 }
+            )
+            CalcButton(
+                modifier = modifier.constrainAs(calc_button) {
+                    centerHorizontallyTo(parent)
+                    bottom.linkTo(formula_card.top, margin = 8.dp)
+                },
+                formulaId,
+                ohmViewModel
             )
         }
     }
 
+@Composable
+fun CalcButton(modifier: Modifier, formulaId: Int, viewModel: OhmsLawViewModel?) {
+    Button(
+        onClick = { viewModel?.selectFormularAndcalculate(formulaId, value1, value2) },
+        modifier.height(40.dp),
+        contentPadding = PaddingValues(horizontal = 64.dp)
+    ) {
+        Text(text = "Calculate")
+    }
+}
+
 
 @Composable
 fun ResultTextView(result: String, modifier: Modifier) {
-    Text(text = result)
+    val screenWidth = LocalConfiguration.current.screenWidthDp
+    Surface(modifier = modifier
+        .paddingFromBaseline(8.dp)
+        .border(2.dp, MaterialTheme.colors.primary, MaterialTheme.shapes.medium),
+        contentColor = MaterialTheme.colors.background,
+        elevation = 8.dp,
+        shape = MaterialTheme.shapes.medium) {
+        Row(
+            modifier
+                .height(84.dp)
+                .width((screenWidth - 16).dp)
+                .background(color = MaterialTheme.colors.primaryVariant)
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = result)
+        }
+    }
 }
 
 @Composable
@@ -121,7 +155,6 @@ fun OhmsLawToolBar(mContext: Context, navController: NavController) {
             IconButton(onClick = { onDisplayMenu = !onDisplayMenu }) {
                 Icon(Icons.Default.MoreVert, "Option menu")
             }
-
             DropdownMenu(
                 expanded = onDisplayMenu,
                 onDismissRequest = { onDisplayMenu = false }) {
@@ -161,7 +194,13 @@ fun FormulaCard (modifier: Modifier, viewModel: OhmsLawViewModel?) {
                     contentDescription = "",
                     modifier = modifier
                         .padding(8.dp)
-                        .clickable(true) { viewModel!!.setLabels("power", "resistance") }
+                        .clickable(true) {
+                            viewModel!!.setLabelsAndFormulaId(
+                                "power",
+                                "resistance",
+                                R.drawable.icon_1
+                            )
+                        }
                         .size(66.dp, 67.dp)
                 )
                 Image(
@@ -169,7 +208,13 @@ fun FormulaCard (modifier: Modifier, viewModel: OhmsLawViewModel?) {
                     contentDescription = "",
                     modifier = modifier
                         .padding(8.dp)
-                        .clickable { viewModel!!.setLabels("power", "current") }
+                        .clickable {
+                            viewModel!!.setLabelsAndFormulaId(
+                                "power",
+                                "current",
+                                R.drawable.icon_2
+                            )
+                        }
                         .size(66.dp, 67.dp)
                 )
                 Image(
@@ -177,7 +222,13 @@ fun FormulaCard (modifier: Modifier, viewModel: OhmsLawViewModel?) {
                     contentDescription = "",
                     modifier = modifier
                         .padding(8.dp)
-                        .clickable { viewModel!!.setLabels("current", "resistance") }
+                        .clickable {
+                            viewModel!!.setLabelsAndFormulaId(
+                                "current",
+                                "resistance",
+                                R.drawable.icon_3
+                            )
+                        }
                         .size(66.dp, 67.dp)
                 )
                 Image(
@@ -185,7 +236,13 @@ fun FormulaCard (modifier: Modifier, viewModel: OhmsLawViewModel?) {
                     contentDescription = "",
                     modifier = modifier
                         .padding(8.dp)
-                        .clickable { viewModel!!.setLabels("voltage", "current") }
+                        .clickable {
+                            viewModel!!.setLabelsAndFormulaId(
+                                "voltage",
+                                "current",
+                                R.drawable.icon_4
+                            )
+                        }
                         .size(66.dp, 67.dp)
                 )
             }
@@ -195,7 +252,13 @@ fun FormulaCard (modifier: Modifier, viewModel: OhmsLawViewModel?) {
                     contentDescription = "",
                     modifier = modifier
                         .padding(8.dp)
-                        .clickable { viewModel!!.setLabels("voltage", "power") }
+                        .clickable {
+                            viewModel!!.setLabelsAndFormulaId(
+                                "voltage",
+                                "power",
+                                R.drawable.icon_5
+                            )
+                        }
                         .size(66.dp, 67.dp)
                 )
                 Image(
@@ -203,7 +266,13 @@ fun FormulaCard (modifier: Modifier, viewModel: OhmsLawViewModel?) {
                     contentDescription = "",
                     modifier = modifier
                         .padding(8.dp)
-                        .clickable { viewModel!!.setLabels("power", "current") }
+                        .clickable {
+                            viewModel!!.setLabelsAndFormulaId(
+                                "power",
+                                "current",
+                                R.drawable.icon_6
+                            )
+                        }
                         .size(66.dp, 67.dp)
                 )
                 Image(
@@ -211,7 +280,13 @@ fun FormulaCard (modifier: Modifier, viewModel: OhmsLawViewModel?) {
                     contentDescription = "",
                     modifier = modifier
                         .padding(8.dp)
-                        .clickable { viewModel!!.setLabels("voltage", "resistance") }
+                        .clickable {
+                            viewModel!!.setLabelsAndFormulaId(
+                                "voltage",
+                                "resistance",
+                                R.drawable.icon_7
+                            )
+                        }
                         .size(66.dp, 67.dp)
                 )
                 Image(
@@ -219,7 +294,13 @@ fun FormulaCard (modifier: Modifier, viewModel: OhmsLawViewModel?) {
                     contentDescription = "",
                     modifier = modifier
                         .padding(8.dp)
-                        .clickable { viewModel!!.setLabels("current", "resistance") }
+                        .clickable {
+                            viewModel!!.setLabelsAndFormulaId(
+                                "current",
+                                "resistance",
+                                R.drawable.icon_8
+                            )
+                        }
                         .size(66.dp, 67.dp)
                 )
             }
@@ -229,7 +310,13 @@ fun FormulaCard (modifier: Modifier, viewModel: OhmsLawViewModel?) {
                     contentDescription = "",
                     modifier = modifier
                         .padding(8.dp)
-                        .clickable { viewModel!!.setLabels("current", "voltage") }
+                        .clickable {
+                            viewModel!!.setLabelsAndFormulaId(
+                                "current",
+                                "voltage",
+                                R.drawable.icon_9
+                            )
+                        }
                         .size(66.dp, 67.dp)
                 )
                 Image(
@@ -237,7 +324,13 @@ fun FormulaCard (modifier: Modifier, viewModel: OhmsLawViewModel?) {
                     contentDescription = "",
                     modifier = modifier
                         .padding(8.dp)
-                        .clickable { viewModel!!.setLabels("voltage", "resistance") }
+                        .clickable {
+                            viewModel!!.setLabelsAndFormulaId(
+                                "voltage",
+                                "resistance",
+                                R.drawable.icon_10
+                            )
+                        }
                         .size(66.dp, 67.dp)
                 )
                 Image(
@@ -245,7 +338,13 @@ fun FormulaCard (modifier: Modifier, viewModel: OhmsLawViewModel?) {
                     contentDescription = "",
                     modifier = modifier
                         .padding(8.dp)
-                        .clickable { viewModel!!.setLabels("power", "voltage") }
+                        .clickable {
+                            viewModel!!.setLabelsAndFormulaId(
+                                "power",
+                                "voltage",
+                                R.drawable.icon_11
+                            )
+                        }
                         .size(66.dp, 67.dp)
                 )
                 Image(
@@ -253,7 +352,13 @@ fun FormulaCard (modifier: Modifier, viewModel: OhmsLawViewModel?) {
                     contentDescription = "",
                     modifier = modifier
                         .padding(8.dp)
-                        .clickable { viewModel!!.setLabels("power", "resistance") }
+                        .clickable {
+                            viewModel!!.setLabelsAndFormulaId(
+                                "power",
+                                "resistance",
+                                R.drawable.icon_12
+                            )
+                        }
                         .size(66.dp, 67.dp)
                 )
             }
@@ -266,7 +371,7 @@ fun FormulaCard (modifier: Modifier, viewModel: OhmsLawViewModel?) {
 fun TextBoxes(labels: MutableList<String>, modifier: Modifier) {
     var textInput1 by remember { mutableStateOf("") }
     var textInput2 by remember { mutableStateOf("")}
-    val screenWidth = LocalContext.current.resources.displayMetrics.widthPixels
+    val screenWidth = LocalConfiguration.current.screenWidthDp - 32
     Row(
         modifier = modifier
             .padding(8.dp)
@@ -275,27 +380,30 @@ fun TextBoxes(labels: MutableList<String>, modifier: Modifier) {
     ) {
         TextField(
             modifier = modifier
-                .width(164.dp)
+                .width((screenWidth / 2).dp)
                 .border(2.dp, MaterialTheme.colors.primary, MaterialTheme.shapes.medium)
-                .heightIn(min = 56.dp)
-                .padding(horizontal = 8.dp),
+                .heightIn(min = 48.dp)
+                .padding(horizontal = 8.dp)
+                .background(color = MaterialTheme.colors.background),
             value = textInput1,
-            onValueChange = {textInput1 = it},
-            textStyle = TextStyle(color = MaterialTheme.colors.onBackground),
+            onValueChange = {textInput1 = it
+                            value1 = textInput1 },
             placeholder = { Text(labels[0], color = MaterialTheme.colors.primaryVariant)},
             shape = MaterialTheme.shapes.medium,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            singleLine = true
-            )
+            singleLine = true,
+        )
+        Spacer(modifier = modifier.padding(8.dp))
         TextField(
             modifier = modifier
-                .width(164.dp)
+                .width((screenWidth / 2).dp)
                 .border(2.dp, MaterialTheme.colors.primary, MaterialTheme.shapes.medium)
-                .heightIn(min = 56.dp)
-                .padding(horizontal = 8.dp),
+                .heightIn(min = 48.dp)
+                .padding(horizontal = 8.dp)
+                .background(color = MaterialTheme.colors.background),
             value = textInput2,
-            textStyle = TextStyle(color = MaterialTheme.colors.onBackground),
-            onValueChange = {textInput2 = it},
+            onValueChange = {textInput2 = it
+                                value2 = textInput2 },
             placeholder = { Text(labels[1], color = MaterialTheme.colors.primaryVariant)},
             shape = MaterialTheme.shapes.medium,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
@@ -303,6 +411,10 @@ fun TextBoxes(labels: MutableList<String>, modifier: Modifier) {
         )
     }
 }
+
+private var value1: String = ""
+private  var value2: String = ""
+
 
 @Preview
 @Composable
