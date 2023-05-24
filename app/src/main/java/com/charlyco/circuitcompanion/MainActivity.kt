@@ -39,7 +39,7 @@ fun MainApp() {
                 OhmsLaw(navController)
             }
             composable("star_delta") {
-                StarDelta()
+                StarDelta(navController)
             }
             composable("rlc_circuit") {
                 RlcCircuit()

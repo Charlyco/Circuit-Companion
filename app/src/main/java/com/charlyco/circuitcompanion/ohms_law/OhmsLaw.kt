@@ -50,7 +50,7 @@ fun OhmsLaw(navController: NavController) {
 @Composable
 fun OhmsLawScreen(modifier: Modifier) {
     val owner = LocalViewModelStoreOwner.current
-        val ohmViewModel: OhmsLawViewModel? = owner?.let {
+    val ohmViewModel: OhmsLawViewModel? = owner?.let {
             viewModel(
                 it,
                 "OhmViewModel",
@@ -102,7 +102,7 @@ fun OhmsLawScreen(modifier: Modifier) {
 fun CalcButton(modifier: Modifier, formulaId: Int, viewModel: OhmsLawViewModel?) {
     Button(
         onClick = { viewModel?.selectFormularAndcalculate(formulaId, value1, value2) },
-        modifier.height(40.dp),
+        modifier = modifier.height(40.dp),
         contentPadding = PaddingValues(horizontal = 64.dp)
     ) {
         Text(text = "Calculate")
@@ -115,7 +115,7 @@ fun ResultTextView(result: String, modifier: Modifier) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
     Surface(modifier = modifier
         .paddingFromBaseline(8.dp)
-        .border(2.dp, MaterialTheme.colors.primary, MaterialTheme.shapes.medium),
+        .border(2.dp, MaterialTheme.colors.primaryVariant, MaterialTheme.shapes.medium),
         contentColor = MaterialTheme.colors.background,
         elevation = 8.dp,
         shape = MaterialTheme.shapes.medium) {

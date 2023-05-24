@@ -13,6 +13,8 @@ import com.airbnb.lottie.compose.*
 import com.example.circuitcompanion.R
 import kotlinx.coroutines.delay
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import com.airbnb.lottie.RenderMode
 
 @Composable
 fun SplashScreen(navController: NavHostController) {

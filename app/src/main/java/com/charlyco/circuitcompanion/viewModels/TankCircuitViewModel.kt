@@ -1,4 +1,4 @@
-package com.limitless.circuitcalulator.viewModels
+package com.charlyco.circuitcompanion.viewModels
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
